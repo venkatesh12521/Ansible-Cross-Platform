@@ -1,0 +1,9 @@
+- name: Allow HTTP Port 80
+  win_firewall_rule:
+    name: "Allow HTTP 80"
+    localport: 80
+    action: allow
+    direction: in
+    protocol: tcp
+    state: present
+    enabled: false

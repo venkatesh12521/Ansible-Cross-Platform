@@ -1,0 +1,29 @@
+---
+- name: Create application directory
+  ansible.builtin.file:
+    path: /opt/company-app
+    state: directory
+    mode: '0755'
+
+- name: Deploy application configuration
+  ansible.builtin.copy:
+    content: |
+      application_name={{ company_app_name }}
+      version={{ company_app_version }}
+      environment={{ company_app_environment }}
+      managed_by=ansible
+    dest: /opt/company-app/application.conf
+    mode: '0644'
+
+- name: Deploy application version
+  ansible.builtin.copy:
+    content: "{{ company_app_version }}\n"
+    dest: /opt/company-app/version.txt
+    mode: '0644'
+
+- name: Deploy application web page
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    mode: '0644'
+  notify: Restart nginx

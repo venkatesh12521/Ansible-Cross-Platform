@@ -1,0 +1,16 @@
+- name: Configure linux
+  hosts: linux
+  become: yes
+
+  roles:
+    - linux
+    - linux_application
+    - linux_validation
+
+- name: Configure windows
+  hosts: windows
+
+  roles:
+    - windows_firewall
+    - windows
+    - windows_patching

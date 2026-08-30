@@ -1,0 +1,9 @@
+- name: Check Nginx service
+  ansible.builtin.service_facts:
+
+- name: Verify service
+  assert:
+    that:
+      - ansible_facts.services['nginx'].state == 'running'
+    fail_msg: "Nginx is not running"
+    success_msg: "Nginx is running"

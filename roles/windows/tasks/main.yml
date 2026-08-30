@@ -1,0 +1,59 @@
+- name: create application directory
+  win_file:
+    path: C:\CompanyApp
+    state: directory
+
+- name: create application configuration directory
+  win_file:
+    path: C:\CompanyApp\config
+    state: directory
+
+- name: create application logs directory
+  win_file:
+    path: C:\CompanyApp\logs
+    state: directory
+
+- name: Deploy application configuration
+  win_copy:
+    content: |
+      application_name=CompanyDemoApp
+      environment=lab
+    dest: C:\CompanyApp\application.txt
+
+- name: Install chocolatey
+  win_chocolatey:
+    name: chocolatey
+    state: present
+
+- name: Install 7-Zip
+  chocolatey.chocolatey.win_chocolatey:
+    name: 7zip
+    state: latest
+
+- name: check 7zip
+  win_file_version:
+    path: 'C:\Program Files\7-Zip\7z.exe'
+  register: seven_zip
+
+- name: Display
+  debug:
+    var: seven_zip
+
+- name: Install Chrome
+  win_chocolatey:
+    name: googlechrome
+    version: '153.0.8010.12'
+    state: present
+  tags: chrome
+
+- name: Check Chrome
+  win_file_version:
+    path: 'C:\Program Files (x86)\Google\Chrome\chrome.exe'
+  register: chrome_version
+  when: false
+
+- name: Display chrome
+  debug:
+    var: chrome_version
+  tags: version
+  when: false

@@ -1,0 +1,6 @@
+windows_applications:
+  - name: 7zip
+    desired_version: "26.2.0"
+
+  - name: google_chrome
+    desired_version: "153.0.8010.12"

@@ -1,0 +1,16 @@
+---
+- name: Search for available Windows security updates
+  ansible.windows.win_updates:
+    category_names:
+      - SecurityUpdates
+      - CriticalUpdates
+    state: searched
+  register: windows_updates
+
+- name: Display Windows patch summary
+  ansible.builtin.debug:
+    msg:
+      - "Windows host: {{ inventory_hostname }}"
+      - "Updates available: {{ windows_updates.found_update_count }}"
+      - "Updates installed: {{ windows_updates.installed_update_count }}"
+      - "Reboot required: {{ windows_updates.reboot_required }}"

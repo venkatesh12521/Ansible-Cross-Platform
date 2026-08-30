@@ -1,0 +1,37 @@
+- name: Install packages
+  apt:
+    name:
+      - curl
+      - wget
+      - unzip
+      - nginx
+    state: present
+    update_cache: yes
+
+- name: Ensure SSH service running
+  service:
+    name: ssh
+    state: started
+    enabled: yes
+
+- name: Ensure nginx service running
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+#- name: Deploy application configuration
+ # copy:
+  #  content: |
+   #   application_name={{ company_app_name }}
+    #  version:{{ company_app_version }}
+     # environment={{ company_app_environment }}
+   # dest: /opt/company-app/application.conf
+   # mode: '0644'
+
+#- name: Deplyoy web app
+ # template:
+  #  src: index.html.j2
+   # dest: /var/www/html/index.html
+    #mode: '0644'
+ # notify: Restart nginx
