@@ -42,18 +42,16 @@
 - name: Install Chrome
   win_chocolatey:
     name: googlechrome
-    version: '153.0.8010.12'
     state: present
   tags: chrome
 
 - name: Check Chrome
   win_file_version:
-    path: 'C:\Program Files (x86)\Google\Chrome\chrome.exe'
+    path: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
   register: chrome_version
-  when: false
-
+  ignore_errors: true
 - name: Display chrome
   debug:
     var: chrome_version
   tags: version
-  when: false
+  when: chrome_version is defined
