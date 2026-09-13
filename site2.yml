@@ -1,0 +1,57 @@
+- name: Windows patching
+  hosts: windows
+  gather_facts: false
+
+  tasks:
+
+    - name: Install Windows Updates
+      ansible.windows.win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - Updates
+        reboot: false
+      register: update_result
+
+    - name: Show update result
+      ansible.builtin.debug:
+        msg:
+          - "Updates installed: {{ update_result.updates | length }}"
+          - "Reboot required: {{ update_result.reboot_required }}"
+
+    - name: Notify user - restart required
+      win_msg:
+        display_seconds: 120
+        msg: |
+          ========================================
+          Windows Updates Installed
+          ========================================
+
+          Your computer needs to be restarted
+          to finish the update process.
+
+          Please restart your computer when
+          convenient.
+
+          IT Operations
+      when: update_result.reboot_required
+
+    - name: Notify user - no restart required
+      win_msg:
+        display_seconds: 120
+        msg: |
+          ========================================
+          Windows Update Completed
+          ========================================
+
+          No restart is required at this time.
+
+          IT Operations
+      when:
+        - not update_result.reboot_required
+        - update_result.updates | length == 0
+
+    - name: Reboot if required
+      ansible.windows.win_reboot:
+        reboot_timeout: 1800
+      when: update_result.reboot_required
